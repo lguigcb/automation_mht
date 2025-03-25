@@ -6,7 +6,10 @@ import pandas as pd
 import os
 import sys
 import webbrowser
+from PIL import Image, ImageTk
 import automacao
+
+basedir = os.path.dirname(__file__)
 
 def get_resource_path(relative_path):
     if getattr(sys,'frozen',False):
@@ -22,6 +25,7 @@ class TelaPrincipal:
         self.root = root
         self.root.title("Automações Manhattan")
         self.root.geometry("620x550")
+        # self.root.iconbitmap(r"icons\mini_icon.ico")
 
         # Create a Notebook (tabbed interface)
         self.notebook = ttk.Notebook(self.root)
@@ -342,7 +346,17 @@ class TelaPrincipal:
                 automation.close_driver()
 
 if __name__ == "__main__":
+    try:
+        from ctypes import windll
+        myappid = "mycompany.myproduct.subproduct.version"
+        windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+    except ImportError:
+        pass
     root = ttk.Window(themename="litera")
+    def handle_button_press(event):
+        root.destroy()
+    button_icon = tk.PhotoImage(file=os.path.join(basedir, "icone.png"))  
+    root.iconbitmap(os.path.join(basedir, "mini_icon.ico"))
     root._style = ttk.Style()
     app = TelaPrincipal(root)
     root.mainloop()

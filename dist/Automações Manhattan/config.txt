@@ -1,5 +1,0 @@
-;!@Install@!UTF-8!
-Title="Meu Instalador Personalizado"
-BeginPrompt="Deseja instalar o aplicativo?"
-RunProgram="setup.exe"
-;!@InstallEnd@!
