@@ -1,0 +1,181 @@
+Control Identifiers:			
+			
+Dialog - 'Sessão A - [24 x 80]'    (L199	 T20	 R1175	 B684)
+['Sessão A - [24 x 80]Dialog'	 'Sessão A - [24 x 80]'	 'Dialog']      	
+child_window(title="Sessão A - [24 x 80]"	 control_type="Window")     		
+   | 			
+   | StatusBar - ''    (L207	 T657	 R1167	 B676)
+   | ['StatusBar'	 'Conectado ao servidor remoto/host 10.0.0.1 utilizando lu/pool M69352 e porta 23StatusBar']		
+   | child_window(auto_id="59393"	 control_type="StatusBar")		
+   |    | 			
+   |    | Static - ''    (L207	 T659	 R235	 B676)
+   |    | ['Static'	 'Static0'	 'Static1']	
+   |    |			
+   |    | Static - 'Conectado ao servidor remoto/host 10.0.0.1 utilizando lu/pool M69352 e porta 23'    (L237	 T659	 R900	 B676)
+   |    | ['Conectado ao servidor remoto/host 10.0.0.1 utilizando lu/pool M69352 e porta 23Static'	 'Conectado ao servidor remoto/host 10.0.0.1 utilizando lu/pool M69352 e porta 23'	 'Static2']	
+   |    | child_window(title="Conectado ao servidor remoto/host 10.0.0.1 utilizando lu/pool M69352 e porta 23"	 control_type="Text")        		
+   |    |			
+   |    | Static - 'Imp 125 ativado 10.1.88.125'    (L902	 T659	 R1148	 B676)
+   |    | ['Imp 125 ativado 10.1.88.125Static'	 'Static3'	 'Imp 125 ativado 10.1.88.125']	
+   |    | child_window(title="Imp 125 ativado 10.1.88.125"	 control_type="Text")		
+   |			
+   | Pane - ''    (L207	 T632	 R1167	 B657)
+   | ['Pane'	 'Pane0'	 'Pane1']	
+   | child_window(auto_id="1"	 control_type="Pane")		
+   |			
+   | Pane - ''    (L207	 T128	 R1167	 B632)
+   | ['Pane2']			
+   | child_window(auto_id="2"	 control_type="Pane")		
+   |			
+   | Pane - ''    (L207	 T71	 R1167	 B128)
+   | ['Pane3']			
+   |    |			
+   |    | Pane - ''    (L207	 T71	 R1167	 B128)
+   |    | ['Pane4']			
+   |    |    | 			
+   |    |    | ScrollBar - ''    (L207	 T71	 R1167	 B128)
+   |    |    | ['ScrollBar']			
+   |    |    |    | 			
+   |    |    |    | Pane - ''    (L207	 T71	 R1167	 B128)
+   |    |    |    | ['Pane5']			
+   |    |    |    |    |			
+   |    |    |    |    | Pane - ''    (L207	 T71	 R1397	 B128)        
+   |    |    |    |    | ['Pane6']			
+   |    |    |    |    |    | 			
+   |    |    |    |    |    | Toolbar - ''    (L207	 T71	 R1397	 B128)
+   |    |    |    |    |    | ['ToolbarCopiar texto selecionado para área de transferência'	 'ToolbarColar conteúdo da área de transferência iniciando na posição do cursor'	 'ToolbarEnviar arquivos para o sistema central'	 'ToolbarRemapear funções do teclado'
+   |    |    |    |    |    |    | 			
+   |    |    |    |    |    |    | Button - 'Imprimir tela inteira ou área demarcada (texto)'    (L207	 T73	 R288	 B124)
+   |    |    |    |    |    |    | ['Imprimir tela inteira ou área demarcada (texto)Button'	 'Button'	 'Imprimir tela inteira ou área demarcada (texto)'	 'Button0'
+   |    |    |    |    |    |    | child_window(title="Imprimir tela inteira ou área demarcada (texto)"	 control_type="Button")		
+   |    |    |    |    |    |    |			
+   |    |    |    |    |    |    | Button - 'Copiar texto selecionado para área de transferência'    (L296	 T73	 R377	 B124)
+   |    |    |    |    |    |    | ['Copiar texto selecionado para área de transferência'	 'Button2'	 'Copiar texto selecionado para área de transferênciaButton']	
+   |    |    |    |    |    |    | child_window(title="Copiar texto selecionado para área de transferência"	 control_type="Button")		
+   |    |    |    |    |    |    |			
+   |    |    |    |    |    |    | Button - 'Colar conteúdo da área de transferência iniciando na posição do cursor'    (L377	 T73	 R458	 B124)
+   |    |    |    |    |    |    | ['Colar conteúdo da área de transferência iniciando na posição do cursor'	 'Colar conteúdo da área de transferência iniciando na posição do cursorButton'	 'Button3']	
+   |    |    |    |    |    |    | child_window(title="Colar conteúdo da área de transferência iniciando na posição do cursor"	 control_type="Button")		
+   |    |    |    |    |    |    | 			
+   |    |    |    |    |    |    | Button - 'Enviar arquivos para o sistema central'    (L466	 T73	 R547	 B124)
+   |    |    |    |    |    |    | ['Enviar arquivos para o sistema centralButton'	 'Enviar arquivos para o sistema central'	 'Button4']    	
+   |    |    |    |    |    |    | child_window(title="Enviar arquivos para o sistema central"	 control_type="Button")		
+   |    |    |    |    |    |    |			
+   |    |    |    |    |    |    | Button - 'Receber arquivos do sistema central'    (L547	 T73	 R628	 B124)
+   |    |    |    |    |    |    | ['Receber arquivos do sistema centralButton'	 'Receber arquivos do sistema central'	 'Button5']	
+   |    |    |    |    |    |    | child_window(title="Receber arquivos do sistema central"	 control_type="Button")		
+   |    |    |    |    |    |    | 			
+   |    |    |    |    |    |    | Button - 'Configurar características de vídeo tais como cursor ou indicador'    (L636	 T73	 R717	 B124)  
+   |    |    |    |    |    |    | ['Configurar características de vídeo tais como cursor ou indicadorButton'	 'Configurar características de vídeo tais como cursor ou indicador'	 'Button6']	
+   |    |    |    |    |    |    | child_window(title="Configurar características de vídeo tais como cursor ou indicador"	 control_type="Button")		
+   |    |    |    |    |    |    |			
+   |    |    |    |    |    |    | Button - 'Configurar cores do vídeo'    (L717	 T73	 R798	 B124)
+   |    |    |    |    |    |    | ['Configurar cores do vídeoButton'	 'Button7'	 'Configurar cores do vídeo']	
+   |    |    |    |    |    |    | child_window(title="Configurar cores do vídeo"	 control_type="Button")		
+   |    |    |    |    |    |    | 			
+   |    |    |    |    |    |    | Button - 'Remapear funções do teclado'    (L806	 T73	 R887	 B124)
+   |    |    |    |    |    |    | ['Remapear funções do teclado'	 'Remapear funções do tecladoButton'	 'Button8']	
+   |    |    |    |    |    |    | child_window(title="Remapear funções do teclado"	 control_type="Button")		
+   |    |    |    |    |    |    |			
+   |    |    |    |    |    |    | Button - 'Iniciar registro da digitação'    (L895	 T73	 R976	 B124)
+   |    |    |    |    |    |    | ['Iniciar registro da digitação'	 'Iniciar registro da digitaçãoButton'	 'Button9']	
+   |    |    |    |    |    |    | child_window(title="Iniciar registro da digitação"	 control_type="Button")		
+   |    |    |    |    |    |    |			
+   |    |    |    |    |    |    | Button - 'Parar registro da digitação e salvar'    (L976	 T73	 R1057	 B124)
+   |    |    |    |    |    |    | ['Parar registro da digitação e salvar'	 'Parar registro da digitação e salvarButton'	 'Button10']       	
+   |    |    |    |    |    |    | child_window(title="Parar registro da digitação e salvar"	 control_type="Button")		
+   |    |    |    |    |    |    | 			
+   |    |    |    |    |    |    | Button - 'Iniciar uma macro/script'    (L1065	 T73	 R1146	 B124)
+   |    |    |    |    |    |    | ['Iniciar uma macro/script'	 'Iniciar uma macro/scriptButton'	 'Button11']	
+   |    |    |    |    |    |    | child_window(title="Iniciar uma macro/script"	 control_type="Button")		
+   |    |    |    |    |    |    |			
+   |    |    |    |    |    |    | Button - 'Parar execução da macro/script'    (L1146	 T73	 R1227	 B124)
+   |    |    |    |    |    |    | ['Parar execução da macro/scriptButton'	 'Parar execução da macro/script'	 'Button12']	
+   |    |    |    |    |    |    | child_window(title="Parar execução da macro/script"	 control_type="Button")		
+   |    |    |    |    |    |    |			
+   |    |    |    |    |    |    | Button - 'Página de suporte do Personal Communications na Web'    (L1235	 T73	 R1316	 B124)
+   |    |    |    |    |    |    | ['Página de suporte do Personal Communications na WebButton'	 'Página de suporte do Personal Communications na Web'	 'Button13']	
+   |    |    |    |    |    |    | child_window(title="Página de suporte do Personal Communications na Web"	 control_type="Button")		
+   |    |    |    |    |    |    | 			
+   |    |    |    |    |    |    | Button - 'Exibir Índice de tópicos de ajuda'    (L1316	 T73	 R1397	 B124)
+   |    |    |    |    |    |    | ['Exibir Índice de tópicos de ajudaButton'	 'Exibir Índice de tópicos de ajuda'	 'Button14']	
+   |    |    |    |    |    |    | child_window(title="Exibir Índice de tópicos de ajuda"	 control_type="Button")		
+   |    |    |    | 			
+   |    |    |    | Button - 'Uma coluna à esquerda'    (L207	 T71	 R224	 B128)
+   |    |    |    | ['Uma coluna à esquerdaButton'	 'Uma coluna à esquerda'	 'Button15']	
+   |    |    |    | child_window(title="Uma coluna à esquerda"	 auto_id="UpButton"	 control_type="Button")	
+   |    |    |    |			
+   |    |    |    | Button - 'Uma página à esquerda'    (L0	 T0	 R0	 B0)
+   |    |    |    | ['Uma página à esquerda'	 'Uma página à esquerdaButton'	 'Button16']	
+   |    |    |    | child_window(title="Uma página à esquerda"	 auto_id="UpPageButton"	 control_type="Button")	
+   |    |    |    | 			
+   |    |    |    | Thumb - 'Posição'    (L223	 T71	 R240	 B128)      
+   |    |    |    | ['PosiçãoThumb'	 'Posição'	 'Thumb']	
+   |    |    |    | child_window(title="Posição"	 auto_id="ScrollbarThumb"	 control_type="Thumb")	
+   |    |    |    |			
+   |    |    |    | Button - 'Uma página à direita'    (L240	 T71	 R1150	 B128)
+   |    |    |    | ['Uma página à direitaButton'	 'Button17'	 'Uma página à direita']	
+   |    |    |    | child_window(title="Uma página à direita"	 auto_id="DownPageButton"	 control_type="Button")	
+   |    |    |    | 			
+   |    |    |    | Button - 'Uma coluna à direita'    (L1150	 T71	 R1167	 B128)
+   |    |    |    | ['Uma coluna à direita'	 'Button18'	 'Uma coluna à direitaButton']	
+   |    |    |    | child_window(title="Uma coluna à direita"	 auto_id="DownButton"	 control_type="Button")	
+   |			
+   | TitleBar - ''    (L223	 T23	 R1167	 B51)
+   | ['TitleBar']			
+   |    |			
+   |    | Menu - 'Sistema'    (L207	 T28	 R229	 B50)
+   |    | ['Sistema'	 'SistemaMenu'	 'Menu'	 'Sistema0'
+   |    | child_window(title="Sistema"	 auto_id="MenuBar"	 control_type="MenuBar")	
+   |    |    |			
+   |    |    | MenuItem - 'Sistema'    (L207	 T28	 R229	 B50)
+   |    |    | ['Sistema2'	 'MenuItem'	 'SistemaMenuItem'	 'MenuItem0'
+   |    |    | child_window(title="Sistema"	 control_type="MenuItem") 		
+   |    | 			
+   |    | Button - 'Minimizar'    (L1028	 T21	 R1075	 B51)
+   |    | ['MinimizarButton'	 'Minimizar'	 'Button19']	
+   |    | child_window(title="Minimizar"	 control_type="Button")      		
+   |    |			
+   |    | Button - 'Maximizar'    (L1075	 T21	 R1121	 B51)
+   |    | ['Maximizar'	 'Button20'	 'MaximizarButton']	
+   |    | child_window(title="Maximizar"	 control_type="Button")      		
+   |    |			
+   |    | Button - 'Fechar'    (L1121	 T21	 R1168	 B51)
+   |    | ['FecharButton'	 'Fechar'	 'Button21']	
+   |    | child_window(title="Fechar"	 control_type="Button")		
+   |			
+   | Menu - 'Aplicativo'    (L207	 T51	 R1167	 B70)
+   | ['Aplicativo'	 'AplicativoMenu'	 'Menu2']	
+   | child_window(title="Aplicativo"	 auto_id="MenuBar"	 control_type="MenuBar")	
+   |    | 			
+   |    | MenuItem - 'Arquivo'    (L207	 T51	 R263	 B70)
+   |    | ['Arquivo'	 'ArquivoMenuItem'	 'MenuItem2']	
+   |    | child_window(title="Arquivo"	 control_type="MenuItem")      		
+   |    |			
+   |    | MenuItem - 'Editar'    (L263	 T51	 R307	 B70)
+   |    | ['EditarMenuItem'	 'Editar'	 'MenuItem3']	
+   |    | child_window(title="Editar"	 control_type="MenuItem")       		
+   |    |			
+   |    | MenuItem - 'Configurações'    (L307	 T51	 R398	 B70)        
+   |    | ['Configurações'	 'ConfiguraçõesMenuItem'	 'MenuItem4']     	
+   |    | child_window(title="Configurações"	 control_type="MenuItem")		
+   |    |			
+   |    | MenuItem - 'Exibir'    (L398	 T51	 R441	 B70)
+   |    | ['Exibir'	 'MenuItem5'	 'ExibirMenuItem']	
+   |    | child_window(title="Exibir"	 control_type="MenuItem")       		
+   |    |			
+   |    | MenuItem - 'Comunicação'    (L441	 T51	 R529	 B70)
+   |    | ['ComunicaçãoMenuItem'	 'Comunicação'	 'MenuItem6']	
+   |    | child_window(title="Comunicação"	 control_type="MenuItem")  		
+   |    |			
+   |    | MenuItem - 'Ações'    (L529	 T51	 R575	 B70)
+   |    | ['AçõesMenuItem'	 'MenuItem7'	 'Ações']	
+   |    | child_window(title="Ações"	 control_type="MenuItem")        		
+   |    | 			
+   |    | MenuItem - 'Janela'    (L575	 T51	 R621	 B70)
+   |    | ['Janela'	 'JanelaMenuItem'	 'MenuItem8']	
+   |    | child_window(title="Janela"	 control_type="MenuItem")       		
+   |    |			
+   |    | MenuItem - 'Ajuda'    (L621	 T51	 R666	 B70)
+   |    | ['Ajuda'	 'AjudaMenuItem'	 'MenuItem9']	
+   |    | child_window(title="Ajuda"	 control_type="MenuItem")		
