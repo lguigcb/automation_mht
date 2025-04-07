@@ -454,7 +454,10 @@ class Automation():
                     continue
 
                 elif filial != inv_type_value and reason_code == "M1" and filial == "1401":
-                    self.executar_script(script_input_item_Name, f"00{item}", 30)
+                    if len(item) == 6:
+                        self.executar_script(script_input_item_Name, f"000{item}", 30)
+                    else:
+                        self.executar_script(script_input_item_Name, f"00{item}", 30)
                     auto_click.click_elemento(lupa, 30)
                     auto_click.click_elemento(checkbox_sku, 30)
                     auto_click.click_elemento(submit_sku, 30)
@@ -481,7 +484,10 @@ class Automation():
                     self.popup_please_wait()
 
                 elif filial == inv_type_value and status != att1_source_value:
-                    self.executar_script(script_input_item_Name, f"00{item}", 30)
+                    if len(item) == 6:
+                        self.executar_script(script_input_item_Name, f"000{item}", 30)
+                    else:
+                        self.executar_script(script_input_item_Name, f"00{item}", 30)
                     auto_click.click_elemento(lupa, 30)
                     auto_click.click_elemento(checkbox_sku, 30)
                     auto_click.click_elemento(submit_sku, 30)
