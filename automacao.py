@@ -121,7 +121,7 @@ class Automation():
         try:
             auto = AutoClick(self.driver)
             select_wm_mobile = "//button[@id='wmMobile']"
-            tela_ead_cross = "html/body/app-root/ion-app/ion-router-outlet/app-menu/ion-content/div/ion-list/app-menu-node[6]/ion-item/ion-label"
+            tela_ead_cross = "/html/body/app-root/ion-app/ion-router-outlet/app-menu/ion-content/div/ion-list/app-menu-node[5]/ion-item/ion-label"
             receb_asn = "/html/body/app-root/ion-app/ion-router-outlet/app-menu-details/ion-content/ion-list/ion-item[2]/ion-label"
             dock_door = "/html/body/app-root/ion-app/ion-router-outlet/app-workflow/ion-content/div/wm-workflow-list/ion-list/div/div/div/div/text-input/ion-item/ion-grid/ion-row[2]/ion-col[1]/input"
             stg_1302 = "1302"
@@ -201,8 +201,8 @@ class Automation():
         go_stg = "/html/body/app-root/ion-app/ion-router-outlet/app-workflow/ion-content/div/wm-workflow-list/ion-list/div/div/div/div/text-input/ion-item/ion-grid/ion-row[2]/ion-col[2]/ion-button"
         recebimento_tela = "/html/body/app-root/ion-app/ion-router-outlet/app-menu-details/ion-content/ion-list/ion-item[2]/ion-label"
         pop = "/html/body/app-root/ion-app/ion-popover/error-popover/ion-content/div"
-        if auto_click.elemento_existe(associate_button, 5):
-            auto_click.click_elemento(associate_button, 5)
+        if auto_click.elemento_existe(associate_button, 2):
+            auto_click.click_elemento(associate_button, 2)
             # sleep(1)
             # self.popup_please_wait()
         else:
@@ -230,7 +230,7 @@ class Automation():
                     continue
 
                 # Clica no botão "Go Receiving"
-                auto_click.click_elemento(go_receiving_1, 2)
+                auto_click.click_elemento(go_receiving_1, 1)
                 try:
                     WebDriverWait(self.driver, 2).until(
                         EC.presence_of_element_located((By.XPATH, asn_campo_1))
@@ -239,7 +239,7 @@ class Automation():
                     pass
 
                 # **Se o pop-up de erro aparecer, pressionar ESC e continuar**
-                if auto_click.elemento_existe(pop, 2):
+                if auto_click.elemento_existe(pop, 1):
                     print(f"Pop-up de erro detectado ao processar ASN {asn}. Fechando...")
                     ActionChains(self.driver).send_keys(Keys.ESCAPE).perform()
                     feedback.append(f"Erro: ASN {asn} já recebida")
@@ -266,11 +266,13 @@ class Automation():
                 auto_click.click_elemento(go_stg, 2)
 
                 try:
-                    auto_click.click_elemento(associate_button, 2)
-                    auto_click.click_elemento(asn_campo_1, 2)
-                    auto_click.enviar_keys(asn_campo_1, asn, 2)
-                    auto_click.click_elemento(go_receiving_1, 2)
-                # sleep(2)
+                    if auto_click.elemento_existe(associate_button, 2):
+                        auto_click.click_elemento(associate_button, 2)
+                        # sleep(1)
+                        # self.popup_please_wait()
+                    else:
+                        print("Botão 'Associate Additional ASN' não encontrado. Continuando...")  # Se der erro aqui, seguimos adiante
+                        # sleep(2)
                 except:
                     pass 
 
@@ -342,6 +344,7 @@ class Automation():
                 # sleep(1)
             except Exception as e:
                 print(f"Erro ao encontrar o ASN: {e}")
+                self.driver.quit()
                 raise Exception("Erro ao selecionar ASN")
 
         # Verificar status da ASN
@@ -367,6 +370,7 @@ class Automation():
 
         except Exception as e:
             print(f"Erro ao verificar status do ASN: {e}")
+            self.driver.quit()
             raise Exception("Erro ao verificar status do ASN")
 
     def reason_code_auto(self, df, reason_code, status, filial, comentario1, comentario2):
@@ -417,7 +421,7 @@ class Automation():
                     elemento_desejado = auto_click.encontrar_elemento_por_texto('span.row-action-label', 'ReIdentify Item', 30)
 
                     if elemento_desejado:
-                        sleep(0.5)
+                        sleep(1)
                         elemento_desejado.click()
                         print("ReIdentify Item encontrado")
                     else:
@@ -440,11 +444,13 @@ class Automation():
                         auto_click.scroll_to_element(att1_source)
                         att1_source_value = auto_click.selecionar(att1_source)
                         print(f"Passou de primeira ILPN:{ilpn}")
+                        break
                     except:
                         print(f"Erro ao selecionar inv_type_value ILPN{ilpn}, Tentando novamente... Tentativa {tentativas + 1}")
                         feedback_msg = "[ERRO] Erro ao selecionar inv_type_value"
                         feedback.append(feedback_msg)
-                        break
+                        if tentativas == 2:
+                            break
 
                 if filial == inv_type_value and status == att1_source_value:
                     feedback_msg = "ILPN com filial e status igual"
@@ -454,10 +460,10 @@ class Automation():
                     continue
 
                 elif filial != inv_type_value and reason_code == "M1" and filial == "1401":
-                    if len(item) == 6:
-                        self.executar_script(script_input_item_Name, f"000{item}", 30)
-                    else:
-                        self.executar_script(script_input_item_Name, f"00{item}", 30)
+                    if len(item) < 9:
+                        item = item.zfill(9)
+                    self.executar_script(script_input_item_Name, item, 30)
+
                     auto_click.click_elemento(lupa, 30)
                     auto_click.click_elemento(checkbox_sku, 30)
                     auto_click.click_elemento(submit_sku, 30)
@@ -484,10 +490,10 @@ class Automation():
                     self.popup_please_wait()
 
                 elif filial == inv_type_value and status != att1_source_value:
-                    if len(item) == 6:
-                        self.executar_script(script_input_item_Name, f"000{item}", 30)
-                    else:
-                        self.executar_script(script_input_item_Name, f"00{item}", 30)
+                    if len(item) < 9:
+                        item = item.zfill(9)
+                    self.executar_script(script_input_item_Name, item, 30)
+
                     auto_click.click_elemento(lupa, 30)
                     auto_click.click_elemento(checkbox_sku, 30)
                     auto_click.click_elemento(submit_sku, 30)
