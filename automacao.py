@@ -104,6 +104,7 @@ class Automation():
             self.menu("Inventory Details")
             auto_click.click_elemento(inventory_details_menu, self.wait)
             self.popup_please_wait()
+            sleep(5)
         except Exception as e:
             print(f"Verificar o erro {e}")
 
@@ -409,10 +410,10 @@ class Automation():
             
             try:
                 print(f"Processando ILPN: {ilpn}, Item: {item}, ASN: {asn}")
-
                 auto_click.click_elemento(inventory_container_path, 30)
                 auto_click.clear_field(inventory_container_path, 30)
                 auto_click.enviar_keys(inventory_container_path, ilpn, 30)
+                sleep(1)
                 auto_click.pressionar_enter(inventory_container_path, 10)
                 auto_click.click_elemento(checkbox, 10)
 

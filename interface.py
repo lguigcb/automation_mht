@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import filedialog, messagebox, ttk
 import ttkbootstrap as ttk
 import tkinter as tk
+import time
 import pandas as pd
 import os
 import sys
@@ -173,7 +174,8 @@ class TelaPrincipal:
 
         ref1_comentario_lista = ['Ilpn C/Bloqueio (82/72)', 'M1 - Origem 0014 P/InventoryType P/ 1401', 
                                 'Trocando Status BOA P/ QEB', 'Trocando Status QEB P/ BOA', 'D15 - Débito 20%', 
-                                'FA - Débito Extravio 100%', 'DT - Débito Total 100%']
+                                'FA - Débito Extravio 100%', 'DT - Débito Total 100%',
+                                'FA - Extravio Roubado']
         
         self.comentarios = tk.StringVar()
         self.coment_1 = ttk.Combobox(frame_comentarios, width=40, textvariable=self.comentarios, values=ref1_comentario_lista, state="readonly")
@@ -284,6 +286,7 @@ class TelaPrincipal:
             login.logando()
 
             automation.selecionar_tela_inventory_details()
+            time.sleep(5)
 
             self.df = automation.reason_code_auto(self.df, reason_code, status, filial, comentario1, comentario2)
 
