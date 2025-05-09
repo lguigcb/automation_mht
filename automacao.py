@@ -15,7 +15,7 @@ class AutoClick:
         self.driver = driver
 
     def _encontrar_elemento(self, xpath: str, timeout: int, condition):
-        return WebDriverWait(self.driver, timeout).until(condition((By.XPATH, xpath)))
+        return WebDriverWait(self.driver, timeout).until(condition(By.XPATH, xpath))
 
     def click_elemento(self, xpath: str, timeout: int = 30):
         elemento = self._encontrar_elemento(xpath, timeout, EC.element_to_be_clickable)
@@ -104,7 +104,6 @@ class Automation():
             self.menu("Inventory Details")
             auto_click.click_elemento(inventory_details_menu, self.wait)
             self.popup_please_wait()
-            sleep(5)
         except Exception as e:
             print(f"Verificar o erro {e}")
 
@@ -326,16 +325,16 @@ class Automation():
 
     def processar_asn(self, auto_click, asn_field, selecionar_asn, botao_verify, confirma_verify, asn, item, ilpn):
         print(f"Processando ASN: {asn}, {item}, {ilpn}")
-        auto_click.clear_field(asn_field,30)
-        auto_click.click_elemento(asn_field, 30)
-        auto_click.enviar_keys(asn_field, asn, 30)
-        auto_click.pressionar_enter(asn_field, 30)
+        auto_click.clear_field(asn_field,10)
+        auto_click.click_elemento(asn_field, 10)
+        auto_click.enviar_keys(asn_field, asn, 10)
+        auto_click.pressionar_enter(asn_field, 10)
         # self.popup_please_wait()
 
         # Capturar o elemento novamente para evitar stale element reference
         for tentativa in range(3):
             try:
-                selecionar_asn_element = WebDriverWait(self.driver, 30).until(
+                selecionar_asn_element = WebDriverWait(self.driver, 10).until(
                     EC.presence_of_element_located((By.XPATH, selecionar_asn))
                 )
                 selecionar_asn_element.click()
@@ -351,7 +350,7 @@ class Automation():
         # Verificar status da ASN
         try:
             selecao_status_asn = "//*[@id='main']/screen-page/div/div/div[2]/div/ion-content/card-panel/div/div/card-view/div/div[1]/div[1]"
-            status_asn_element = WebDriverWait(self.driver, 30).until(
+            status_asn_element = WebDriverWait(self.driver, 10).until(
                 EC.presence_of_element_located((By.XPATH, selecao_status_asn))
             )
             status = status_asn_element.text.strip()
@@ -364,10 +363,10 @@ class Automation():
 
             # Se chegou aqui, o status era "In Receiving", então continua com a verificação
             auto_click.scroll_to_element(botao_verify)
-            auto_click.click_elemento(botao_verify, 30)
-            auto_click.click_elemento(confirma_verify, 30)
+            auto_click.click_elemento(botao_verify, 10)
+            auto_click.click_elemento(confirma_verify, 10)
             # self.popup_please_wait()
-            auto_click.clear_field(asn_field, 30)
+            auto_click.clear_field(asn_field, 10)
 
         except Exception as e:
             print(f"Erro ao verificar status do ASN: {e}")

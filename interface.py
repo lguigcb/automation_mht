@@ -214,7 +214,7 @@ class TelaPrincipal:
         status_field = ttk.Label(frame_reason_filial_status, text='Status BOA/QEB')
         status_field.grid(column=4, row=0, padx=5)
 
-        lista_status = ["BOA", "QEB"]
+        lista_status = ["BOA", "QEB", "SLD"]
         self.status = tk.StringVar()
         self.lista_status_combobox = ttk.Combobox(frame_reason_filial_status, width=5, textvariable=self.status, values=lista_status, state="readonly")
         self.lista_status_combobox.grid(column=5, row=0, padx=5)
