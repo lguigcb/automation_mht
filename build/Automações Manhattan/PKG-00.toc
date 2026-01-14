@@ -1,4 +1,4 @@
-('C:\\Users\\2905043620\\Documents\\aplicativos\\macro_reason_code_mht\\automation_mht\\build\\Automações '
+('C:\\Users\\2905043620\\Documents\\App_Manhattan\\automation_mht\\build\\Automações '
  'Manhattan\\Automações Manhattan.pkg',
  {'BINARY': True,
   'DATA': True,
@@ -11,54 +11,54 @@
   'SYMLINK': False},
  [('pyi-contents-directory _internal', '', 'OPTION'),
   ('PYZ-00.pyz',
-   'C:\\Users\\2905043620\\Documents\\aplicativos\\macro_reason_code_mht\\automation_mht\\build\\Automações '
+   'C:\\Users\\2905043620\\Documents\\App_Manhattan\\automation_mht\\build\\Automações '
    'Manhattan\\PYZ-00.pyz',
    'PYZ'),
   ('struct',
-   'C:\\Users\\2905043620\\Documents\\aplicativos\\macro_reason_code_mht\\automation_mht\\build\\Automações '
+   'C:\\Users\\2905043620\\Documents\\App_Manhattan\\automation_mht\\build\\Automações '
    'Manhattan\\localpycs\\struct.pyc',
    'PYMODULE'),
   ('pyimod01_archive',
-   'C:\\Users\\2905043620\\Documents\\aplicativos\\macro_reason_code_mht\\automation_mht\\build\\Automações '
+   'C:\\Users\\2905043620\\Documents\\App_Manhattan\\automation_mht\\build\\Automações '
    'Manhattan\\localpycs\\pyimod01_archive.pyc',
    'PYMODULE'),
   ('pyimod02_importers',
-   'C:\\Users\\2905043620\\Documents\\aplicativos\\macro_reason_code_mht\\automation_mht\\build\\Automações '
+   'C:\\Users\\2905043620\\Documents\\App_Manhattan\\automation_mht\\build\\Automações '
    'Manhattan\\localpycs\\pyimod02_importers.pyc',
    'PYMODULE'),
   ('pyimod03_ctypes',
-   'C:\\Users\\2905043620\\Documents\\aplicativos\\macro_reason_code_mht\\automation_mht\\build\\Automações '
+   'C:\\Users\\2905043620\\Documents\\App_Manhattan\\automation_mht\\build\\Automações '
    'Manhattan\\localpycs\\pyimod03_ctypes.pyc',
    'PYMODULE'),
   ('pyimod04_pywin32',
-   'C:\\Users\\2905043620\\Documents\\aplicativos\\macro_reason_code_mht\\automation_mht\\build\\Automações '
+   'C:\\Users\\2905043620\\Documents\\App_Manhattan\\automation_mht\\build\\Automações '
    'Manhattan\\localpycs\\pyimod04_pywin32.pyc',
    'PYMODULE'),
   ('pyiboot01_bootstrap',
-   'C:\\Users\\2905043620\\Documents\\aplicativos\\macro_reason_code_mht\\automation_mht\\venv\\Lib\\site-packages\\PyInstaller\\loader\\pyiboot01_bootstrap.py',
+   'C:\\Users\\2905043620\\documents\\App_Manhattan\\automation_mht\\venv\\Lib\\site-packages\\PyInstaller\\loader\\pyiboot01_bootstrap.py',
    'PYSOURCE'),
   ('pyi_rth_inspect',
-   'C:\\Users\\2905043620\\Documents\\aplicativos\\macro_reason_code_mht\\automation_mht\\venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_inspect.py',
+   'C:\\Users\\2905043620\\Documents\\App_Manhattan\\automation_mht\\venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_inspect.py',
    'PYSOURCE'),
   ('pyi_rth_pkgutil',
-   'C:\\Users\\2905043620\\Documents\\aplicativos\\macro_reason_code_mht\\automation_mht\\venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_pkgutil.py',
+   'C:\\Users\\2905043620\\Documents\\App_Manhattan\\automation_mht\\venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_pkgutil.py',
    'PYSOURCE'),
   ('pyi_rth_multiprocessing',
-   'C:\\Users\\2905043620\\Documents\\aplicativos\\macro_reason_code_mht\\automation_mht\\venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_multiprocessing.py',
+   'C:\\Users\\2905043620\\Documents\\App_Manhattan\\automation_mht\\venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_multiprocessing.py',
    'PYSOURCE'),
   ('pyi_rth_pkgres',
-   'C:\\Users\\2905043620\\Documents\\aplicativos\\macro_reason_code_mht\\automation_mht\\venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_pkgres.py',
+   'C:\\Users\\2905043620\\Documents\\App_Manhattan\\automation_mht\\venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_pkgres.py',
    'PYSOURCE'),
   ('pyi_rth_setuptools',
-   'C:\\Users\\2905043620\\Documents\\aplicativos\\macro_reason_code_mht\\automation_mht\\venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_setuptools.py',
+   'C:\\Users\\2905043620\\Documents\\App_Manhattan\\automation_mht\\venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_setuptools.py',
    'PYSOURCE'),
   ('pyi_rth__tkinter',
-   'C:\\Users\\2905043620\\Documents\\aplicativos\\macro_reason_code_mht\\automation_mht\\venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth__tkinter.py',
+   'C:\\Users\\2905043620\\Documents\\App_Manhattan\\automation_mht\\venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth__tkinter.py',
    'PYSOURCE'),
   ('interface',
-   'C:\\Users\\2905043620\\Documents\\aplicativos\\macro_reason_code_mht\\automation_mht\\interface.py',
+   'C:\\Users\\2905043620\\Documents\\App_Manhattan\\automation_mht\\interface.py',
    'PYSOURCE')],
- 'python312.dll',
+ 'python313.dll',
  True,
  False,
  False,

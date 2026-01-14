@@ -25,7 +25,7 @@ class TelaPrincipal:
     def __init__(self, root):
         self.root = root
         self.root.title("Automações Manhattan")
-        self.root.geometry("620x550")
+        self.root.geometry("920x550")
         # self.root.iconbitmap(r"icons\mini_icon.ico")
 
         # Create a Notebook (tabbed interface)
@@ -175,7 +175,7 @@ class TelaPrincipal:
         ref1_comentario_lista = ['Ilpn C/Bloqueio (82/72)', 'M1 - Origem 0014 P/InventoryType P/ 1401', 
                                 'Trocando Status BOA P/ QEB', 'Trocando Status QEB P/ BOA', 'D15 - Débito 20%', 
                                 'FA - Débito Extravio 100%', 'DT - Débito Total 100%',
-                                'FA - Extravio Roubado']
+                                'FA - Extravio Roubado', '96 - Trocando Status SLD P/ QEB']
         
         self.comentarios = tk.StringVar()
         self.coment_1 = ttk.Combobox(frame_comentarios, width=40, textvariable=self.comentarios, values=ref1_comentario_lista, state="readonly")
@@ -196,7 +196,7 @@ class TelaPrincipal:
         reasoncode_label = ttk.Label(frame_reason_filial_status, text='Reason Code')
         reasoncode_label.grid(column=0, row=0, padx=5)
 
-        lista_reasoncode = ['T3', 'M1', '72', '82', 'FA', 'DT', 'AV', 'VF', 'VR']
+        lista_reasoncode = ['T1','T3', 'M1', '72', '82', 'FA', 'DT', 'AV', 'VF', 'VR', '96']
         self.rc = tk.StringVar()
         self.lista_itens = ttk.Combobox(frame_reason_filial_status, width=5, textvariable=self.rc, values=lista_reasoncode, state="readonly")
         self.lista_itens.grid(column=1, row=0, padx=5)
@@ -211,7 +211,7 @@ class TelaPrincipal:
         self.lista_filial_combobox.grid(column=3, row=0, padx=5)
 
         # Status
-        status_field = ttk.Label(frame_reason_filial_status, text='Status BOA/QEB')
+        status_field = ttk.Label(frame_reason_filial_status, text='Status BOA/QEB/SLD')
         status_field.grid(column=4, row=0, padx=5)
 
         lista_status = ["BOA", "QEB", "SLD"]
@@ -291,7 +291,7 @@ class TelaPrincipal:
             self.df = automation.reason_code_auto(self.df, reason_code, status, filial, comentario1, comentario2)
 
             self.exibir_dados_planilha()
-            messagebox.showinfo("Sucesso", "Execução concluída com sucesso!")
+            messagebox.showinfo("Finalizado", "Execução finalizada!")
 
             automation.close_driver()
 

@@ -15,7 +15,8 @@ class AutoClick:
         self.driver = driver
 
     def _encontrar_elemento(self, xpath: str, timeout: int, condition):
-        return WebDriverWait(self.driver, timeout).until(condition(By.XPATH, xpath))
+        locator = (By.XPATH,xpath)
+        return WebDriverWait(self.driver, timeout).until(condition(locator))
 
     def click_elemento(self, xpath: str, timeout: int = 30):
         elemento = self._encontrar_elemento(xpath, timeout, EC.element_to_be_clickable)
@@ -71,24 +72,51 @@ class AutoClick:
 
         return elemento
     
+    def click_js(self, css_selector: str, timeout: int = 30):
+        """
+        Clica em um elemento usando JavaScript, dado um seletor CSS.
+        :param css_selector: seletor CSS do elemento.
+        :param timeout: tempo máximo de espera.
+        """
+        try:
+            # Espera o elemento existir no DOM
+            elemento = WebDriverWait(self.driver, timeout).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, css_selector))
+            )
+            
+            # Executa o clique via JS
+            self.driver.execute_script("arguments[0].click();", elemento)
+            print(f"Clique realizado com sucesso em: {css_selector}")
+            return True
+
+        except Exception as e:
+            print(f"Erro ao clicar via JS em {css_selector}: {e}")
+            return False
 
 class Automation():
     def __init__(self, wait: int = 30):
         self.wait = wait
         self.driver = None
-
-    def setup_driver(self, link: str = "https://viavp-auth.sce.manh.com/discover_user"):
-        self.driver = webdriver.Chrome()
+        
+    def setup_driver(self, link: str = "https://viavp-auth.sce.manh.com/auth/realms/maactive/protocol/openid-connect/auth?scope=openid&client_id=zuulserver.1.0.0&redirect_uri=https://viavp.sce.manh.com/login&response_type=code&state=SB6a0O"):
+        options = webdriver.ChromeOptions()
+        options.add_argument("--force-device-scale-factor=0.8")  # 80% de zoom
+        
+        # cria o driver já com as opções
+        self.driver = webdriver.Chrome(options=options)
         self.driver.maximize_window()
         self.driver.get(link)
-        AutoClick(self.driver).click_elemento("//input[@id='discover-user-submit']", timeout=self.wait)
+
+        vav_user = "/html/body/div[1]/div[2]/div/div/div/div[2]/ul/li[2]/a/span"
+        AutoClick(self.driver).click_elemento(vav_user, timeout=self.wait)
+
 
     def menu(self, texto: str):
         try:
             auto_click = AutoClick(self.driver)
             aguardando = Automation(self.driver)
             menu = "//ion-menu-toggle"
-            barra = "/html/body/app-root/ion-app/div/ion-split-pane/ion-menu/ui-dm-hamburger/ion-header/ion-input/input"
+            barra = "//*[@id='ion-input-0']"
             aguardando.popup_please_wait()
             auto_click.click_elemento(menu, self.wait)
             auto_click.click_elemento(barra, self.wait)
@@ -153,36 +181,45 @@ class Automation():
             except Exception as e:
                 print(f"Elemento não foi encontrado ou não ficou visivel{e}")    
 
-    def executar_script(self, script: str, texto: str, timeout = 30):
+    def executar_script(self, script: str, texto: str, timeout=30):
         """
-        Executa um script JavaScript no browser e retorna o resultado.
-        :param script: Código JavaScript a ser executado.
-        :return: Retorno do script executado.
+        Executa um script JavaScript no browser para preencher campos Angular/Ionic.
+        :param script: Código JavaScript que deve retornar o input nativo.
+        :param texto: Texto a ser enviado para o campo.
+        :param timeout: Tempo máximo de espera.
         """
         try:
-        # Executa o script JavaScript no navegador
+            # Aguarda até que o transfer-popup esteja no DOM
             WebDriverWait(self.driver, timeout).until(
-            lambda driver: driver.execute_script('return document.querySelector("transfer-popup")') is not None
-        )
-            # sleep(0.5)
+                lambda driver: driver.execute_script(
+                    'return document.querySelector("transfer-popup")') is not None
+            )
 
+            # Busca o input pelo script informado
             input_element = self.driver.execute_script(script)
-        # Verifica se o campo de entrada foi encontrado
+
             if input_element:
                 print("Campo encontrado! Enviando texto...")
-                try:
-                    input_element.click()
-                    input_element.send_keys(texto)  # Envia o texto para o campo
-                except:
-                    input_element.click()
-                    pass
+                # Define o valor e dispara o evento input para Angular/Ionic reconhecer
+                self.driver.execute_script(
+                    """
+                    arguments[0].value = arguments[1];
+                    arguments[0].dispatchEvent(new Event('input', { bubbles: true }));
+                    """,
+                    input_element, texto
+                )
+                return True
             else:
                 print("Erro: Input não encontrado!")
+                return False
 
         except TimeoutException:
             print("Erro, elemento não apareceu dentro do tempo limite")
+            return False
         except Exception as e:
             print(f"Erro ao executar o script: {e}")
+            return False
+
 
     def auto_wm_mobile(self, df):
         auto_click = AutoClick(self.driver)
@@ -287,13 +324,25 @@ class Automation():
     def auto_verify(self, df):
         auto_click = AutoClick(self.driver)
         feedback = []
-        asn_field = "//*[@id='main']/screen-page/div/div/div[1]/dm-filter/div[2]/div/div[2]/div[1]/text-field-filter/div/ion-row/div/div/ion-input/input"
+        menu = 'button > span'
+        asn_field = "//*[@id='ion-input-2']"
         selecionar_asn = "/html/body/app-root/ion-app/div/ion-split-pane/ion-router-outlet/screen-page/div/div/div[2]/div/ion-content/card-panel/div[1]/div/card-view/div"
         botao_verify = "/html/body/app-root/ion-app/div/ion-split-pane/ion-router-outlet/screen-page/div/div/div[2]/div/footer-actions/ion-grid/ion-row/ion-col[3]/div/div/dm-action[8]/ion-button"
         confirma_verify = "/html/body/app-root/ion-app/ion-modal/verify-popup/ion-footer/ion-toolbar/ion-row/ion-col[2]/ion-button[2]"
         lista_de_dados = self.loop_lendo_planilha(df)
         self.popup_please_wait()
-        auto_click.click_elemento(asn_field, 30)
+        
+        # try:
+        #     """Apenas em telas pequenas, ou se for executar sem diminuir o zoom"""
+        #     sleep(5)
+        #     auto_click.click_js("ion-button.toggle-button")
+        #     auto_click.click_js('ion-button[data-component-id="ASN-ASN-chevron-down"]')
+        #     # input("Elemento do Menu foi encontrado")
+        # except:
+        #     # input("Não foi encontrado o elemento do Menu")
+        #     print("Não foi encontrado o elemento do Menu")
+        
+        auto_click.click_elemento(asn_field, 30)        
 
         for ilpn, item, asn in lista_de_dados:
             feedback_msg = "Erro na automação"  # Valor padrão
@@ -303,14 +352,27 @@ class Automation():
                 feedback_msg = "ASN verificado com sucesso"
             except Exception as e:
                 print(f"Erro inesperado na automação: {e}")
-                status = "//*[@id='main']/screen-page/div/div/div[2]/div/ion-content/card-panel/div/div/card-view/div/div[1]/div[1]"
-                desc = auto_click.selecionar(status, 30).strip()
+
+                # Se a exceção já contém o status, usa ela
+                if "não está em In Receiving" in str(e):
+                    feedback_msg = str(e)  # aqui já vai vir com "ASN XXXX não está In Receiving - Status: YYY"
+                else:
+                    # fallback: tenta pegar o status na tela
+                    status = "//*[@id='main']/screen-page/div/div/div[2]/div/ion-content/card-panel/div/div/card-view/div/div[1]/div[1]"
+                    try:
+                        desc = auto_click.selecionar(status, 30).strip()
+                        feedback_msg = f"Analisar ASN manualmente status: {desc}"
+                    except:
+                        feedback_msg = "Erro inesperado sem status visível"
+
+                # Tenta fechar popup se existir
                 try:
                     cancel = "/html/body/app-root/ion-app/ion-modal/verify-popup/ion-footer/ion-toolbar/ion-row/ion-col[1]/ion-button"
                     auto_click.click_elemento(cancel, 30)
                 except:
                     pass
-                feedback_msg = f"Analisar ASN manualmente status: {desc}"
+
+                # feedback_msg = f"Analisar ASN manualmente status: {desc}"
 
             feedback.append(feedback_msg)
 
@@ -343,9 +405,8 @@ class Automation():
                 print(f"Tentativa {tentativa+1}: Stale Element Reference, tentando novamente...")
                 # sleep(1)
             except Exception as e:
-                print(f"Erro ao encontrar o ASN: {e}")
-                self.driver.quit()
-                raise Exception("Erro ao selecionar ASN")
+                print(f"[ERRO] Não consegui selecionar ASN: {e}")
+                raise RuntimeError("Erro ao selecionar ASN")
 
         # Verificar status da ASN
         try:
@@ -357,9 +418,8 @@ class Automation():
             print(f"Status da ASN {asn}: {status}")
 
             if status.lower() != "in receiving":
-                messagebox.showinfo("Atenção", f"ASN {asn} não está em In Receiving. Status: {status}\n\n Fechando Execução do Verify atualizar planilha por segurança")
-                self.driver.quit()
-                raise Exception(f"ASN não está In Receiving - Status: {status}")
+                print(f"[AVISO] ASN {asn} não está em In Receiving. Status: {status}. Status: {status}\n\n Fechando Execução do Verify atualizar planilha por segurança")
+                raise RuntimeError(f"ASN {asn} não está In Receiving - Status: {status}")
 
             # Se chegou aqui, o status era "In Receiving", então continua com a verificação
             auto_click.scroll_to_element(botao_verify)
@@ -370,14 +430,14 @@ class Automation():
 
         except Exception as e:
             print(f"Erro ao verificar status do ASN: {e}")
-            self.driver.quit()
-            raise Exception("Erro ao verificar status do ASN")
+            self.close_driver()
+            return
 
     def reason_code_auto(self, df, reason_code, status, filial, comentario1, comentario2):
         auto_click = AutoClick(self.driver)
         feedback = []
         # Definição dos XPaths
-        inventory_container_path = "/html/body/app-root/ion-app/div/ion-split-pane/ion-router-outlet/inventory-grid/dm-list-layout/div/div/div[2]/dm-filter/div[2]/div/div[2]/div[2]/text-field-filter/div/ion-row/div/div/ion-input/input"
+        inventory_container_path = '//*[@id="ion-input-1"]'
         checkbox = "//*[@id='main']/inventory-grid/dm-list-layout/div/div/div[3]/div[2]/div[1]/ion-content/grid-view/div/ngx-datatable/div/datatable-body/datatable-selection/datatable-scroller/datatable-row-wrapper[1]/datatable-body-row/div[1]/datatable-body-cell/div/label/input"
         more_options = "//*[@id='main']/inventory-grid/dm-list-layout/div/div/div[3]/div[2]/footer-actions/ion-grid/ion-row/ion-col[3]/div/div/more-actions/ion-button"
         reidentify_item = "//*[@id='mat-menu-panel-2']/div/div[2]/button"
@@ -404,6 +464,16 @@ class Automation():
 
         lista_dados = self.loop_lendo_planilha(df)
 
+        # try:
+        #     sleep(5)
+        #     auto_click.click_js('ion-button[data-component-id="filter-count-btn"]')
+        #     auto_click.click_js('ion-button[data-component-id="InventoryGrid-Inventorycontainer-chevron-down"]')
+        #     # auto_click.click_js('ion-button[data-component-id="InventoryGrid-Inventoryattribute1-chevron-down"]')
+        #     # input("Elemento do Menu foi encontrado")
+        # except:
+        #     # input("Não foi encontrado o elemento do Menu")
+        #     print("Não foi encontrado o elemento do Menu")
+
         for ilpn, item, asn in lista_dados:
             feedback_msg = "Erro: Não processado"  # Inicializa com um valor padrão
             
@@ -411,13 +481,14 @@ class Automation():
                 print(f"Processando ILPN: {ilpn}, Item: {item}, ASN: {asn}")
                 auto_click.click_elemento(inventory_container_path, 30)
                 auto_click.clear_field(inventory_container_path, 30)
+                sleep(2)
                 auto_click.enviar_keys(inventory_container_path, ilpn, 30)
-                sleep(1)
                 auto_click.pressionar_enter(inventory_container_path, 10)
                 auto_click.click_elemento(checkbox, 10)
 
                 try:
                     auto_click.click_elemento(more_options, 30)
+                    sleep(1)
                     elemento_desejado = auto_click.encontrar_elemento_por_texto('span.row-action-label', 'ReIdentify Item', 30)
 
                     if elemento_desejado:
@@ -435,13 +506,71 @@ class Automation():
                     feedback.append(feedback_msg)
                     continue
 
-                self.popup_please_wait()
+                # self.popup_please_wait()
+                sleep(3)
+
+                # --- Validação de segurança do item exibido na tela ---
+                try:
+                    # XPATH preciso com base na estrutura real do HTML
+                    xpath_item = (
+                        "//transfer-popup//ion-row[@data-component-id='itemName']"
+                        "/following-sibling::ion-row//span[@appuniqueiddirective and normalize-space(text())!='']"
+                    )
+
+                    # Espera o item aparecer dentro do modal
+                    elemento_item_tela = WebDriverWait(self.driver, 15).until(
+                        EC.presence_of_element_located((By.XPATH, xpath_item))
+                    )
+
+                    # Captura e normaliza o texto exibido
+                    item_tela = elemento_item_tela.text.strip()
+                    print(f"[DEBUG] Texto capturado do item: '{item_tela}'")
+
+                    # Garante que só números sejam considerados e preenche zeros à esquerda
+                    item_tela = ''.join(filter(str.isdigit, item_tela)).zfill(9)
+                    item = str(item).zfill(9)
+
+                    print(f"[CHECK] Item exibido na tela: {item_tela} | Item esperado: {item}")
+
+                    # Validação de consistência
+                    if not item_tela.isdigit() or item_tela == "":
+                        print("[ERRO] Item capturado inválido (vazio ou não numérico). Abortando execução por segurança.")
+                        auto_click.click_elemento(cancel, 10)
+                        feedback_msg = "[ABORTADO] Item capturado inválido ou vazio"
+                        feedback.append(feedback_msg)
+                        continue
+
+                    # Se o item da tela for diferente do importado → aborta
+                    if item_tela != item:
+                        print(f"[ABORTADO] Divergência detectada! Esperado: {item}, Encontrado: {item_tela}")
+                        auto_click.click_elemento(cancel, 10)
+                        feedback_msg = f"[ABORTADO] Item divergente (esperado {item}, encontrado {item_tela})"
+                        feedback.append(feedback_msg)
+                        continue
+
+                    print("[OK] Item validado com sucesso — prosseguindo com reason code.")
+
+                except TimeoutException:
+                    print("[ERRO] Não foi possível localizar o item dentro do modal.")
+                    auto_click.click_elemento(cancel, 10)
+                    feedback_msg = "[ERRO] Item não visível — execução abortada"
+                    feedback.append(feedback_msg)
+                    continue
+
+                except Exception as e:
+                    print(f"[ERRO] Falha ao validar item: {e}")
+                    auto_click.click_elemento(cancel, 10)
+                    feedback_msg = f"[ERRO] Validação do item falhou: {e}"
+                    feedback.append(feedback_msg)
+                    continue
+                # --------------------------------------------------------
+
 
                 # Verificar condição de filial e status
                 for tentativas in range(3):
                     try:
                         inv_type_value = auto_click.selecionar(inv_type, 30)
-                        auto_click.scroll_to_element(att1_source)
+                        # auto_click.scroll_to_element(att1_source)
                         att1_source_value = auto_click.selecionar(att1_source)
                         print(f"Passou de primeira ILPN:{ilpn}")
                         break
@@ -456,23 +585,26 @@ class Automation():
                     feedback_msg = "ILPN com filial e status igual"
                     print("ILPN com filial e status igual")
                     auto_click.click_elemento(cancel, 30)
+                    sleep(1)
                     feedback.append(feedback_msg)  # Adiciona antes do continue
                     continue
 
                 elif filial != inv_type_value and reason_code == "M1" and filial == "1401":
                     if len(item) < 9:
                         item = item.zfill(9)
-                    self.executar_script(script_input_item_Name, item, 30)
+                    # self.executar_script(script_input_item_Name, item, 30)
+                    self.executar_script('return document.querySelector("transfer-popup").querySelectorAll("input")[0];',item)   # aqui o valor vem da sua planilha/loop
 
                     auto_click.click_elemento(lupa, 30)
                     auto_click.click_elemento(checkbox_sku, 30)
                     auto_click.click_elemento(submit_sku, 30)
-                    auto_click.click_elemento(reasoncode_field, 30)
-                    auto_click.enviar_keys(reasoncode_field, reason_code, 30)
-                    auto_click.pressionar_enter(reasoncode_field, 30)
+                    
+                    self.executar_script('return document.querySelector("transfer-popup").querySelectorAll("input")[1];',reason_code,30)
+                    sleep(1)
+                    ActionChains(self.driver).send_keys(Keys.RETURN).perform()
 
                     # Preenchendo os campos adicionais
-                    auto_click.scroll_to_element(ref1)
+                    # auto_click.scroll_to_element(ref1)
                     auto_click.click_elemento(ref1, 30)
                     auto_click.enviar_keys(ref1, comentario1, 30)
                     auto_click.enviar_keys(ref2, comentario2, 30)
@@ -492,17 +624,22 @@ class Automation():
                 elif filial == inv_type_value and status != att1_source_value:
                     if len(item) < 9:
                         item = item.zfill(9)
-                    self.executar_script(script_input_item_Name, item, 30)
-
+                    # self.executar_script(script_input_item_Name, item, 30)
+                    self.executar_script('return document.querySelector("transfer-popup").querySelectorAll("input")[0];', item)# aqui o valor vem da sua planilha/loop
                     auto_click.click_elemento(lupa, 30)
                     auto_click.click_elemento(checkbox_sku, 30)
                     auto_click.click_elemento(submit_sku, 30)
-                    auto_click.click_elemento(reasoncode_field, 30)
-                    auto_click.enviar_keys(reasoncode_field, reason_code, 30)
-                    auto_click.pressionar_enter(reasoncode_field, 30)
+                    # auto_click.click_elemento(reasoncode_field, 30)
+                    # auto_click.enviar_keys(reasoncode_field, reason_code, 30)
+                    # auto_click.pressionar_enter(reasoncode_field, 30)
+                    self.executar_script('return document.querySelector("transfer-popup").querySelectorAll("input")[1];',reason_code,30)
+                    sleep(1)
+                    # Se precisar Enter, pode simular:
+                    
+                    ActionChains(self.driver).send_keys(Keys.RETURN).perform()
 
                     # Preenchendo os campos adicionais
-                    auto_click.scroll_to_element(ref1)
+                    # auto_click.scroll_to_element(ref1)
                     auto_click.click_elemento(ref1, 30)
                     auto_click.enviar_keys(ref1, comentario1, 30)
                     auto_click.enviar_keys(ref2, comentario2, 30)

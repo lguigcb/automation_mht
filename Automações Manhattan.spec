@@ -5,7 +5,12 @@ a = Analysis(
     ['interface.py'],
     pathex=[],
     binaries=[],
-    datas=[('C:\\Users\\2905043620\\Documents\\aplicativos\\macro_reason_code_mht\\icons', ' icons')],
+    datas=[
+        ('C:\\Users\\2905043620\\Documents\\App_Manhattan\\automation_mht\\icons\\github.ico', 'icons'),
+        ('C:\\Users\\2905043620\\Documents\\App_Manhattan\\automation_mht\\icons\\help.ico', 'icons'),
+        ('C:\\Users\\2905043620\\Documents\\App_Manhattan\\automation_mht\\icons\\linkedin_1.ico', 'icons'),
+        ('C:\\Users\\2905043620\\Documents\\App_Manhattan\\automation_mht\\icons\\mini_icon.ico', 'icons')
+        ],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
