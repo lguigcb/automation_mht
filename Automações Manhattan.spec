@@ -1,16 +1,31 @@
 # -*- mode: python ; coding: utf-8 -*-
+# Build onedir do app: dist\Automações Manhattan\ (exe + _internal).
+# Rodar via build.py (gera também o instalador) ou:
+#   venv\Scripts\pyinstaller.exe --noconfirm --clean "Automações Manhattan.spec"
 
+import os
+
+# SPECPATH é definido pelo PyInstaller = pasta deste .spec (raiz do projeto)
+ROOT = SPECPATH
+exec(open(os.path.join(ROOT, 'version.py'), encoding='utf-8').read())  # APP_NAME, VERSION
 
 a = Analysis(
     ['interface.py'],
-    pathex=[],
+    pathex=[ROOT],
     binaries=[],
     datas=[
-        ('C:\\Users\\2905043620\\Documents\\App_Manhattan\\automation_mht\\icons\\github.ico', 'icons'),
-        ('C:\\Users\\2905043620\\Documents\\App_Manhattan\\automation_mht\\icons\\help.ico', 'icons'),
-        ('C:\\Users\\2905043620\\Documents\\App_Manhattan\\automation_mht\\icons\\linkedin_1.ico', 'icons'),
-        ('C:\\Users\\2905043620\\Documents\\App_Manhattan\\automation_mht\\icons\\mini_icon.ico', 'icons')
-        ],
+        # interface.py lê estes arquivos da raiz de _internal (get_resource_path / basedir)
+        (os.path.join(ROOT, 'github.png'), '.'),
+        (os.path.join(ROOT, 'linkedin.png'), '.'),
+        (os.path.join(ROOT, 'help.png'), '.'),
+        (os.path.join(ROOT, 'icone.png'), '.'),
+        (os.path.join(ROOT, 'mini_icon.ico'), '.'),
+        # pasta icons completa (mantida como nas versões anteriores)
+        (os.path.join(ROOT, 'icons', 'github.ico'), 'icons'),
+        (os.path.join(ROOT, 'icons', 'help.ico'), 'icons'),
+        (os.path.join(ROOT, 'icons', 'linkedin_1.ico'), 'icons'),
+        (os.path.join(ROOT, 'icons', 'mini_icon.ico'), 'icons'),
+    ],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -26,7 +41,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name='Automações Manhattan',
+    name=APP_NAME,
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -37,7 +52,7 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['icons\\mini_icon.ico'],
+    icon=[os.path.join(ROOT, 'icons', 'mini_icon.ico')],
 )
 coll = COLLECT(
     exe,
@@ -46,5 +61,5 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name='Automações Manhattan',
+    name=APP_NAME,
 )

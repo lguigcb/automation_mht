@@ -93,6 +93,25 @@ class AutoClick:
             print(f"Erro ao clicar via JS em {css_selector}: {e}")
             return False
 
+    def click_elemento_visivel(self, xpath: str, timeout: int = 30):
+        """
+        Entre todos os matches do xpath, clica no primeiro que estiver visível.
+        Necessário para listas Ionic (autocomplete-overlay) que deixam overlays
+        antigos ocultos no DOM — element_to_be_clickable pegaria o primeiro
+        match (oculto) e estouraria o timeout.
+        """
+        def _visivel(driver):
+            for el in driver.find_elements(By.XPATH, xpath):
+                try:
+                    if el.is_displayed():
+                        return el
+                except StaleElementReferenceException:
+                    continue
+            return False
+
+        elemento = WebDriverWait(self.driver, timeout).until(_visivel)
+        elemento.click()
+
 class Automation():
     def __init__(self, wait: int = 30):
         self.wait = wait
@@ -112,11 +131,12 @@ class Automation():
 
 
     def menu(self, texto: str):
+        menu = "//ion-menu-toggle"
+        barra = "//*[@id='ion-input-0']"
+        auto_click = AutoClick(self.driver)
+        aguardando = Automation(self.driver)
+
         try:
-            auto_click = AutoClick(self.driver)
-            aguardando = Automation(self.driver)
-            menu = "//ion-menu-toggle"
-            barra = "//*[@id='ion-input-0']"
             aguardando.popup_please_wait()
             auto_click.click_elemento(menu, self.wait)
             auto_click.click_elemento(barra, self.wait)
@@ -437,14 +457,18 @@ class Automation():
         auto_click = AutoClick(self.driver)
         feedback = []
         # Definição dos XPaths
-        inventory_container_path = '//*[@id="ion-input-1"]'
-        checkbox = "//*[@id='main']/inventory-grid/dm-list-layout/div/div/div[3]/div[2]/div[1]/ion-content/grid-view/div/ngx-datatable/div/datatable-body/datatable-selection/datatable-scroller/datatable-row-wrapper[1]/datatable-body-row/div[1]/datatable-body-cell/div/label/input"
+        # data-component-id é estável; o id ion-input-N muda conforme quantos ion-inputs foram criados antes (ex.: modal de perfil)
+        inventory_container_path = "//ion-input[@data-component-id='InventoryContainerId']//input"
+        expandir_filtro = "//ion-button[@data-component-id='InventoryGrid-Inventorycontainer-chevron-down']"
+        checkbox = '//*[@id="main"]/inventory-grid/dm-list-layout/div/div/div[3]/div[2]/div[1]/ion-content/grid-view/div/ngx-datatable/div/div/datatable-body/datatable-scroller/div/datatable-row-wrapper/datatable-body-row/div[2]/datatable-body-cell[5]/div/div'
+        # checkbox = "//*[@id='main']/inventory-grid/dm-list-layout/div/div/div[3]/div[2]/div[1]/ion-content/grid-view/div/ngx-datatable/div/datatable-body/datatable-selection/datatable-scroller/datatable-row-wrapper[1]/datatable-body-row/div[1]/datatable-body-cell/div/label/input"
         more_options = "//*[@id='main']/inventory-grid/dm-list-layout/div/div/div[3]/div[2]/footer-actions/ion-grid/ion-row/ion-col[3]/div/div/more-actions/ion-button"
         reidentify_item = "//*[@id='mat-menu-panel-2']/div/div[2]/button"
         reidentify_item_2 = "/html/body/div/div[2]/div/div/div/div[2]/button"
         elementos = "driver.find_elements_by_css_selector('span.row-action-label')"
         lupa = "/html/body/app-root/ion-app/ion-modal/transfer-popup/ion-content/ion-row[2]/div/div/ion-row[2]/ion-col[2]/div/ion-row/ion-col/div/form/ion-row/ion-col/div/ion-row[1]/div/button"
-        checkbox_sku = "/html/body/app-root/ion-app/ion-modal[2]/lookup-dialogue/modal-container/div/div/modal-content/ion-row[3]/grid-view/div/ngx-datatable/div/datatable-body/datatable-selection/datatable-scroller/datatable-row-wrapper/datatable-body-row/div[1]/datatable-body-cell/div/input"
+        checkbox_sku = '//*[@id="lookup-results"]/grid-view/div/ngx-datatable/div/div/datatable-body/datatable-scroller/div/datatable-row-wrapper/datatable-body-row/div[1]/datatable-body-cell/div'
+        # checkbox_sku = "/html/body/app-root/ion-app/ion-modal[2]/lookup-dialogue/modal-container/div/div/modal-content/ion-row[3]/grid-view/div/ngx-datatable/div/datatable-body/datatable-selection/datatable-scroller/datatable-row-wrapper/datatable-body-row/div[1]/datatable-body-cell/div/input"
         submit_sku = "/html/body/app-root/ion-app/ion-modal[2]/lookup-dialogue/modal-container/div/modal-footer/div/div[2]/ion-button"
         script_input_item_Name = '''return document.querySelector("transfer-popup").querySelectorAll("input")[0];'''
         reasoncode_field = "/html/body/app-root/ion-app/ion-modal/transfer-popup/ion-content/ion-row[2]/div/div/ion-row[2]/ion-col[2]/div/ion-row/ion-col/div/form/ion-row/ion-col/div/ion-row[2]/ion-col[1]/autocomplete/div/ion-input/input"
@@ -464,15 +488,11 @@ class Automation():
 
         lista_dados = self.loop_lendo_planilha(df)
 
-        # try:
-        #     sleep(5)
-        #     auto_click.click_js('ion-button[data-component-id="filter-count-btn"]')
-        #     auto_click.click_js('ion-button[data-component-id="InventoryGrid-Inventorycontainer-chevron-down"]')
-        #     # auto_click.click_js('ion-button[data-component-id="InventoryGrid-Inventoryattribute1-chevron-down"]')
-        #     # input("Elemento do Menu foi encontrado")
-        # except:
-        #     # input("Não foi encontrado o elemento do Menu")
-        #     print("Não foi encontrado o elemento do Menu")
+        # Garante que o filtro "Inventory container" esteja expandido (o input só existe quando expandido)
+        if auto_click.elemento_existe(expandir_filtro, 3):
+            print("Filtro Inventory container recolhido, expandindo...")
+            auto_click.click_elemento(expandir_filtro, 10)
+        WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH, inventory_container_path)))
 
         for ilpn, item, asn in lista_dados:
             feedback_msg = "Erro: Não processado"  # Inicializa com um valor padrão
@@ -484,7 +504,9 @@ class Automation():
                 sleep(2)
                 auto_click.enviar_keys(inventory_container_path, ilpn, 30)
                 auto_click.pressionar_enter(inventory_container_path, 10)
+                sleep(1)
                 auto_click.click_elemento(checkbox, 10)
+                
 
                 try:
                     auto_click.click_elemento(more_options, 30)
@@ -724,8 +746,64 @@ class Login():
         self.login = login
         self.senha = senha
 
+    def selecionar_perfil_duquearm(self):
+        """
+        Após o login, garante que o perfil esteja em
+        Organization=DUQUEARM / Facility=DUQUEARM / Profile=PROV_PROF_DUQUEARM.
+        Se o botão da navbar já mostrar Org: DUQUEARM, não faz nada.
+        Lança RuntimeError se a seleção falhar, para a automação não seguir com o Org errado.
+        """
+        auto_click = AutoClick(self.driver)
+
+        # Seletores relativos (sem ion-overlay-N nem autocomplete-overlay[N], que mudam a cada sessão)
+        botao_perfil = "//profile-summary//button[contains(@class,'orgfacbu-container')]"
+        ja_duquearm = "//profile-summary//div[@data-component-id='DUQUEARM']"
+        seta_organization = "//core-profile-selection-modal//button[@data-component-id='autocomplete_open_dropdown_organization']"
+        seta_facility = "//core-profile-selection-modal//button[@data-component-id='autocomplete_open_dropdown_facility']"
+        seta_profile = "//core-profile-selection-modal//button[@data-component-id='autocomplete_open_dropdown_profile']"
+        item_duquearm = "//autocomplete-overlay//ion-label[@title='DUQUEARM']"
+        item_prov_duquearm = "//autocomplete-overlay//ion-label[@title='PROV_PROF_DUQUEARM']"
+        submit = "//core-profile-selection-modal//ion-button[@data-component-id='submit']"
+        modal = "//core-profile-selection-modal"
+
+        try:
+            # Primeira tela pós-login: espera o botão de perfil aparecer (cobre o loading)
+            WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH, botao_perfil)))
+
+            if auto_click.elemento_existe(ja_duquearm, 2):
+                print("Perfil já está em DUQUEARM, pulando seleção de facility")
+                return
+
+            print("Abrindo modal de seleção de perfil...")
+            auto_click.click_elemento(botao_perfil, 10)
+            WebDriverWait(self.driver, 15).until(EC.element_to_be_clickable((By.XPATH, seta_organization)))
+
+            print("Selecionando Organization: DUQUEARM")
+            auto_click.click_elemento(seta_organization, 10)
+            auto_click.click_elemento_visivel(item_duquearm, 15)
+
+            # A lista de Facility carrega em cascata após o Organization
+            print("Selecionando Facility: DUQUEARM")
+            auto_click.click_elemento(seta_facility, 10)
+            auto_click.click_elemento_visivel(item_duquearm, 15)
+
+            print("Selecionando Provisioning Profile: PROV_PROF_DUQUEARM")
+            auto_click.click_elemento(seta_profile, 10)
+            auto_click.click_elemento_visivel(item_prov_duquearm, 15)
+
+            print("Confirmando (Submit)...")
+            auto_click.click_elemento(submit, 10)
+            WebDriverWait(self.driver, 30).until(EC.invisibility_of_element_located((By.XPATH, modal)))
+
+            if not auto_click.elemento_existe(ja_duquearm, 10):
+                raise RuntimeError("Perfil não ficou em DUQUEARM após o Submit")
+
+            print("Perfil alterado para DUQUEARM com sucesso")
+
+        except Exception as e:
+            raise RuntimeError(f"Erro ao selecionar facility/organization DUQUEARM: {e}") from e
+
     def logando(self):
-        
         email= "//input[@id='i0116']"
         senha= "//input[@id='i0118']"
         avancar = "//input[@id='idSIButton9']"
@@ -766,7 +844,12 @@ class Login():
         sleep(1)
         if not tentar_acao(lambda: auto_click.click_elemento(avancar, 10), "Tentando clicar em avançar"):
             return
-        if not tentar_acao(lambda: auto_click.click_elemento(home, 10), "Tentando clicar no home"):
-            return
+
+        # Garante Org/Facility/Profile = DUQUEARM. Lança exceção se falhar -> interface.py interrompe a automação
+        self.selecionar_perfil_duquearm()
+
+        # Home só se existir, sem os 3x10s de espera antigos
+        if auto_click.elemento_existe(home, 5):
+            tentar_acao(lambda: auto_click.click_elemento(home, 10), "Tentando clicar no home", tentativas=1)
 
 # if __name__ == "__main__":

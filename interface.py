@@ -9,6 +9,7 @@ import sys
 import webbrowser
 from PIL import Image, ImageTk
 import automacao
+from version import APP_NAME, VERSION
 
 basedir = os.path.dirname(__file__)
 
@@ -24,7 +25,7 @@ def get_resource_path(relative_path):
 class TelaPrincipal:
     def __init__(self, root):
         self.root = root
-        self.root.title("Automações Manhattan")
+        self.root.title(f"{APP_NAME} v{VERSION}")
         self.root.geometry("920x550")
         # self.root.iconbitmap(r"icons\mini_icon.ico")
 
@@ -173,7 +174,8 @@ class TelaPrincipal:
         ref1_label.grid(column=0, row=0, sticky='w', padx=5, pady=5)
 
         ref1_comentario_lista = ['Ilpn C/Bloqueio (82/72)', 'M1 - Origem 0014 P/InventoryType P/ 1401', 
-                                'Trocando Status BOA P/ QEB', 'Trocando Status QEB P/ BOA', 'D15 - Débito 20%', 
+                                'Trocando Status BOA P/ QEB', 'Trocando Status QEB P/ BOA', 'D15 - Débito 20%',
+                                '77 - Transferencia para DAT Avaria Correios', 
                                 'FA - Débito Extravio 100%', 'DT - Débito Total 100%',
                                 'FA - Extravio Roubado', '96 - Trocando Status SLD P/ QEB']
         
@@ -196,7 +198,7 @@ class TelaPrincipal:
         reasoncode_label = ttk.Label(frame_reason_filial_status, text='Reason Code')
         reasoncode_label.grid(column=0, row=0, padx=5)
 
-        lista_reasoncode = ['T1','T3', 'M1', '72', '82', 'FA', 'DT', 'AV', 'VF', 'VR', '96']
+        lista_reasoncode = ['77','T1','T3', 'M1', '72', '82', 'FA', 'DT', 'AV', 'VF', 'VR', '96']
         self.rc = tk.StringVar()
         self.lista_itens = ttk.Combobox(frame_reason_filial_status, width=5, textvariable=self.rc, values=lista_reasoncode, state="readonly")
         self.lista_itens.grid(column=1, row=0, padx=5)
